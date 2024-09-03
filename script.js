@@ -5,6 +5,7 @@ const sound = document.getElementById("sound");
 const btn = document.getElementById("search-btn");
 
 
+
 function sendUserWord(){
 	let inpWord = document.getElementById("inp-word").value;
 	fetch(`${url}${inpWord}`)
@@ -15,23 +16,31 @@ function sendUserWord(){
 		<div class="result" id="result">
 			<div class="word">
 				<h3>${inpWord}</h3>
-				<button>
+				<button onclick="playSound()">
 					<i class="fa-solid fa-volume-high"></i>
 				</button>
 			</div>
 			<div class="details">
-				<p>pos</p>
-				<p>/sample/</p>
+				<p>${data[0].meanings[0].partOfSpeech}</p>
+				<p>/${data[0].phonetic}/</p>
 			</div>
 
-			<p class="word-meaning">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iste, saepe.</p>
-			<p class="word-example">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quaerat, nulla.</p>
-		</div>
-		`;
+			<p class="word-meaning">${data[0].meanings[0].definitions[0].definition}</p>
+			<p class="word-example">${data[0].meanings[0].definitions[0].example || ""}</p>
+		</div>`;
+		sound.setAttribute("src", `${data[0].phonetics[0].audio}`)
+	})
+	.catch(()=>{
+		result.innerHTML = `<h3 class="error">Couldn't find this</h3>`
 	})
 }
 
+function playSound(){
+	sound.play();
+}
+
 btn.addEventListener("click", sendUserWord)
+
 
 // btn.addEventListener("keypress", function(e){
 
